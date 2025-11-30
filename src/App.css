@@ -1,0 +1,345 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #0a0015;
+  font-family: 'Courier New', monospace;
+}
+
+.app {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: 
+    radial-gradient(ellipse at center, #1a0033 0%, #0a0015 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* CRT Effect */
+.crt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.15) 0px,
+      rgba(0, 0, 0, 0.15) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+  animation: flicker 0.15s infinite;
+}
+
+@keyframes flicker {
+  0% { opacity: 0.95; }
+  50% { opacity: 0.98; }
+  100% { opacity: 0.95; }
+}
+
+/* Menu Styles */
+.menu {
+  text-align: center;
+  z-index: 10;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.title {
+  font-size: 5rem;
+  font-weight: bold;
+  color: #00ffff;
+  text-shadow: 
+    0 0 10px #00ffff,
+    0 0 20px #00ffff,
+    0 0 40px #00ffff,
+    0 0 80px #00ffff;
+  margin-bottom: 1rem;
+  letter-spacing: 0.3em;
+  animation: glow 2s ease-in-out infinite;
+}
+
+.title.game-over {
+  color: #ff00ff;
+  text-shadow: 
+    0 0 10px #ff00ff,
+    0 0 20px #ff00ff,
+    0 0 40px #ff00ff,
+    0 0 80px #ff00ff;
+  animation: glowPink 1s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% { 
+    text-shadow: 
+      0 0 10px #00ffff,
+      0 0 20px #00ffff,
+      0 0 40px #00ffff,
+      0 0 80px #00ffff;
+  }
+  50% { 
+    text-shadow: 
+      0 0 20px #00ffff,
+      0 0 40px #00ffff,
+      0 0 60px #00ffff,
+      0 0 100px #00ffff;
+  }
+}
+
+@keyframes glowPink {
+  0%, 100% { 
+    text-shadow: 
+      0 0 10px #ff00ff,
+      0 0 20px #ff00ff,
+      0 0 40px #ff00ff,
+      0 0 80px #ff00ff;
+  }
+  50% { 
+    text-shadow: 
+      0 0 20px #ff00ff,
+      0 0 40px #ff00ff,
+      0 0 60px #ff00ff,
+      0 0 100px #ff00ff;
+  }
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  color: #ffff00;
+  text-shadow: 0 0 10px #ffff00;
+  margin-bottom: 3rem;
+  letter-spacing: 0.2em;
+}
+
+.neon-button {
+  background: transparent;
+  border: 3px solid #ff00ff;
+  color: #ff00ff;
+  padding: 1rem 3rem;
+  font-size: 1.5rem;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 10px #ff00ff;
+  box-shadow: 
+    0 0 10px #ff00ff,
+    inset 0 0 10px rgba(255, 0, 255, 0.2);
+}
+
+.neon-button:hover {
+  background: rgba(255, 0, 255, 0.2);
+  box-shadow: 
+    0 0 20px #ff00ff,
+    0 0 40px #ff00ff,
+    inset 0 0 20px rgba(255, 0, 255, 0.4);
+  transform: scale(1.05);
+}
+
+.neon-button:active {
+  transform: scale(0.95);
+}
+
+/* Difficulty Selector */
+.difficulty-selector {
+  display: flex;
+  gap: 1rem;
+  margin: 2rem 0;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.difficulty-button {
+  background: transparent;
+  border: 2px solid;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0.6;
+}
+
+.difficulty-button:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.difficulty-button.selected {
+  opacity: 1;
+  box-shadow: 0 0 15px currentColor, inset 0 0 15px rgba(255, 255, 255, 0.2);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.difficulty-badge {
+  font-size: 1.2rem;
+  letter-spacing: 0.2em;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.high-scores {
+  margin-top: 2rem;
+}
+
+.high-score-title {
+  font-size: 1.3rem;
+  color: #ffff00;
+  text-shadow: 0 0 10px #ffff00;
+  letter-spacing: 0.2em;
+  margin-bottom: 0.8rem;
+}
+
+.high-score-item {
+  font-size: 1rem;
+  text-shadow: 0 0 8px currentColor;
+  letter-spacing: 0.15em;
+  margin: 0.3rem 0;
+}
+
+.high-score, .final-score {
+  font-size: 1.8rem;
+  color: #ffff00;
+  text-shadow: 0 0 10px #ffff00;
+  margin-top: 2rem;
+  letter-spacing: 0.15em;
+}
+
+.final-score {
+  font-size: 2.5rem;
+  color: #00ffff;
+  text-shadow: 0 0 15px #00ffff;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.secondary-button {
+  background: transparent;
+  border: 2px solid #00ffff;
+  color: #00ffff;
+  padding: 0.7rem 2rem;
+  font-size: 1.1rem;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 8px #00ffff;
+  box-shadow: 0 0 8px #00ffff;
+}
+
+.secondary-button:hover {
+  background: rgba(0, 255, 255, 0.1);
+  box-shadow: 0 0 15px #00ffff;
+  transform: scale(1.05);
+}
+
+.secondary-button:active {
+  transform: scale(0.95);
+}
+
+/* Game Container */
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  z-index: 10;
+}
+
+.hud {
+  display: flex;
+  gap: 3rem;
+  margin-bottom: 1rem;
+}
+
+.score, .level {
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 0.2em;
+  color: #00ffff;
+  text-shadow: 
+    0 0 10px #00ffff,
+    0 0 20px #00ffff;
+}
+
+.level {
+  color: #ff00ff;
+  text-shadow: 
+    0 0 10px #ff00ff,
+    0 0 20px #ff00ff;
+}
+
+.arena {
+  border: 4px solid #00ffff;
+  box-shadow: 
+    0 0 20px #00ffff,
+    0 0 40px rgba(0, 255, 255, 0.5),
+    inset 0 0 60px rgba(0, 255, 255, 0.1);
+  background: 
+    linear-gradient(rgba(0, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 255, 0.02) 1px, transparent 1px),
+    radial-gradient(ellipse at center, rgba(10, 0, 30, 0.8) 0%, rgba(5, 0, 15, 0.95) 100%);
+  background-size: 40px 40px, 40px 40px, 100% 100%;
+  image-rendering: crisp-edges;
+}
+
+.controls {
+  font-size: 1rem;
+  color: #ffff00;
+  text-shadow: 0 0 8px #ffff00;
+  letter-spacing: 0.15em;
+  margin-top: 0.5rem;
+  opacity: 0.8;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .title {
+    font-size: 3rem;
+  }
+  
+  .subtitle {
+    font-size: 1rem;
+  }
+  
+  .neon-button {
+    font-size: 1.2rem;
+    padding: 0.8rem 2rem;
+  }
+}
+
+@media (max-height: 900px) {
+  .arena {
+    width: 600px !important;
+    height: 600px !important;
+  }
+}
