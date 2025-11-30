@@ -321,25 +321,158 @@ body {
   opacity: 0.8;
 }
 
+/* Mobile optimizations */
+.arena {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 /* Responsive */
-@media (max-width: 900px) {
+@media (max-width: 768px) {
+  .app {
+    padding: 10px;
+  }
+
   .title {
-    font-size: 3rem;
+    font-size: 2.5rem;
+    letter-spacing: 0.2em;
+    margin-bottom: 0.5rem;
   }
   
   .subtitle {
-    font-size: 1rem;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
   }
   
   .neon-button {
-    font-size: 1.2rem;
-    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    padding: 0.7rem 1.5rem;
+    letter-spacing: 0.15em;
+  }
+
+  .secondary-button {
+    font-size: 0.9rem;
+    padding: 0.6rem 1.5rem;
+  }
+
+  .difficulty-selector {
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+
+  .difficulty-button {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+  }
+
+  .high-score-title {
+    font-size: 1rem;
+  }
+
+  .high-score-item {
+    font-size: 0.85rem;
+  }
+
+  .final-score {
+    font-size: 2rem;
+    margin-top: 0.5rem;
+  }
+
+  .high-score {
+    font-size: 1.3rem;
+    margin-top: 1rem;
+  }
+
+  .difficulty-badge {
+    font-size: 1rem;
+  }
+
+  .hud {
+    gap: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .score, .level {
+    font-size: 1.1rem;
+    letter-spacing: 0.15em;
+  }
+
+  .controls {
+    font-size: 0.85rem;
+    margin-top: 0.3rem;
+  }
+
+  .game-container {
+    gap: 0.5rem;
   }
 }
 
-@media (max-height: 900px) {
-  .arena {
-    width: 600px !important;
-    height: 600px !important;
+@media (max-width: 480px) {
+  .title {
+    font-size: 2rem;
+    letter-spacing: 0.15em;
+  }
+
+  .subtitle {
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .neon-button {
+    font-size: 0.9rem;
+    padding: 0.6rem 1.2rem;
+  }
+
+  .difficulty-selector {
+    gap: 0.4rem;
+  }
+
+  .difficulty-button {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.75rem;
+  }
+
+  .hud {
+    gap: 1rem;
+  }
+
+  .score, .level {
+    font-size: 1rem;
+  }
+}
+
+/* Landscape mobile */
+@media (max-height: 600px) and (orientation: landscape) {
+  .title {
+    font-size: 2rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .subtitle {
+    font-size: 0.8rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .difficulty-selector {
+    margin: 0.5rem 0;
+  }
+
+  .neon-button {
+    padding: 0.5rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .high-scores {
+    margin-top: 0.8rem;
+  }
+
+  .hud {
+    margin-bottom: 0.3rem;
+  }
+
+  .controls {
+    margin-top: 0.2rem;
   }
 }
