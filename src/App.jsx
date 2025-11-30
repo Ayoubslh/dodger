@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import './App.css'
 
 const ARENA_SIZE = 800
-const PLAYER_SIZE = 20
+const PLAYER_SIZE = 30
 const INITIAL_PLAYER_POS = { x: ARENA_SIZE / 2, y: ARENA_SIZE / 2 }
 const PLAYER_SPEED = 5
 const DIFFICULTY_INTERVAL = 15000 // 15 seconds
@@ -55,10 +55,8 @@ function App() {
     return saved ? JSON.parse(saved) : { easy: 0, normal: 0, hard: 0, insane: 0 }
   })
   const [difficultyLevel, setDifficultyLevel] = useState(1)
-  const [canvasSize, setCanvasSize] = useState(ARENA_SIZE)
   
   const keysPressed = useRef({})
-  const touchStartPos = useRef(null)
   const gameStartTime = useRef(0)
   const lastAttackTime = useRef(0)
   const lastSlashPositions = useRef([])
@@ -370,20 +368,6 @@ function App() {
     }
   }, [score, highScores, difficultyMode, playSound])
 
-  // Responsive canvas sizing
-  useEffect(() => {
-    const updateCanvasSize = () => {
-      const maxWidth = window.innerWidth - 40
-      const maxHeight = window.innerHeight - 200
-      const size = Math.min(ARENA_SIZE, maxWidth, maxHeight)
-      setCanvasSize(size)
-    }
-    
-    updateCanvasSize()
-    window.addEventListener('resize', updateCanvasSize)
-    return () => window.removeEventListener('resize', updateCanvasSize)
-  }, [])
-
   // Keyboard controls
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -402,73 +386,6 @@ function App() {
       window.removeEventListener('keyup', handleKeyUp)
     }
   }, [])
-
-  // Touch controls
-  useEffect(() => {
-    if (gameState !== 'playing') return
-
-    const canvas = canvasRef.current
-    if (!canvas) return
-
-    const handleTouchStart = (e) => {
-      e.preventDefault()
-      const touch = e.touches[0]
-      const rect = canvas.getBoundingClientRect()
-      const scale = ARENA_SIZE / canvasSize
-      touchStartPos.current = {
-        x: (touch.clientX - rect.left) * scale,
-        y: (touch.clientY - rect.top) * scale
-      }
-    }
-
-    const handleTouchMove = (e) => {
-      e.preventDefault()
-      if (!touchStartPos.current) return
-
-      const touch = e.touches[0]
-      const rect = canvas.getBoundingClientRect()
-      const scale = ARENA_SIZE / canvasSize
-      const touchX = (touch.clientX - rect.left) * scale
-      const touchY = (touch.clientY - rect.top) * scale
-
-      setPlayer(prev => {
-        const dx = touchX - touchStartPos.current.x
-        const dy = touchY - touchStartPos.current.y
-        const distance = Math.sqrt(dx * dx + dy * dy)
-
-        if (distance > 5) {
-          const angle = Math.atan2(dy, dx)
-          const moveSpeed = Math.min(distance * 0.2, PLAYER_SPEED * 2)
-          
-          let newX = prev.x + Math.cos(angle) * moveSpeed
-          let newY = prev.y + Math.sin(angle) * moveSpeed
-
-          newX = Math.max(PLAYER_SIZE / 2, Math.min(ARENA_SIZE - PLAYER_SIZE / 2, newX))
-          newY = Math.max(PLAYER_SIZE / 2, Math.min(ARENA_SIZE - PLAYER_SIZE / 2, newY))
-
-          return { x: newX, y: newY }
-        }
-        return prev
-      })
-
-      touchStartPos.current = { x: touchX, y: touchY }
-    }
-
-    const handleTouchEnd = (e) => {
-      e.preventDefault()
-      touchStartPos.current = null
-    }
-
-    canvas.addEventListener('touchstart', handleTouchStart, { passive: false })
-    canvas.addEventListener('touchmove', handleTouchMove, { passive: false })
-    canvas.addEventListener('touchend', handleTouchEnd, { passive: false })
-
-    return () => {
-      canvas.removeEventListener('touchstart', handleTouchStart)
-      canvas.removeEventListener('touchmove', handleTouchMove)
-      canvas.removeEventListener('touchend', handleTouchEnd)
-    }
-  }, [gameState, canvasSize])
 
   // Game loop
   useEffect(() => {
@@ -598,11 +515,6 @@ function App() {
 
     const ctx = canvas.getContext('2d')
     ctx.clearRect(0, 0, ARENA_SIZE, ARENA_SIZE)
-    
-    // Scale for responsive rendering
-    const scale = canvasSize / ARENA_SIZE
-    ctx.save()
-    ctx.scale(scale, scale)
 
     if (gameState === 'playing') {
       // Draw attacks
@@ -700,9 +612,7 @@ function App() {
       ctx.fill()
       ctx.restore()
     }
-    
-    ctx.restore() // Restore scale
-  }, [gameState, player, attacks, particles, canvasSize])
+  }, [gameState, player, attacks, particles])
 
   return (
     <div className="app">
@@ -746,10 +656,9 @@ function App() {
             ref={canvasRef} 
             width={ARENA_SIZE} 
             height={ARENA_SIZE}
-            style={{ width: canvasSize, height: canvasSize }}
             className="arena"
           />
-          <div className="controls">{window.innerWidth > 768 ? 'WASD / ARROW KEYS' : 'TOUCH & DRAG'} TO MOVE</div>
+          <div className="controls">WASD / ARROW KEYS TO MOVE</div>
         </div>
       )}
 
