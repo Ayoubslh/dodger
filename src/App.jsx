@@ -318,16 +318,33 @@ function App() {
       // Don't collide during warning phase
       if (attack.warning) return false
       
-      const buffer = 5
       if (attack.slashType === 'horizontal' || attack.slashType === 'vertical') {
-        return px + ps > attack.x - buffer && px - ps < attack.x + attack.width + buffer &&
-               py + ps > attack.y - buffer && py - ps < attack.y + attack.height + buffer
+        // Standard AABB (Axis-Aligned Bounding Box) collision
+        // Player must be fully inside the slash hitbox to collide
+        return px + ps > attack.x && px - ps < attack.x + attack.width &&
+               py + ps > attack.y && py - ps < attack.y + attack.height
       } else {
-        // Simplified diagonal collision
+        // Diagonal slash collision using rotated rectangle
         const centerX = attack.x + attack.width / 2
         const centerY = attack.y + attack.height / 2
-        const dist = Math.sqrt((px - centerX) ** 2 + (py - centerY) ** 2)
-        return dist < attack.thickness
+        
+        // Rotate player position around slash center (inverse rotation)
+        const angle = -(attack.rotation || 0) * Math.PI / 180
+        const cos = Math.cos(angle)
+        const sin = Math.sin(angle)
+        
+        const dx = px - centerX
+        const dy = py - centerY
+        
+        const rotatedX = dx * cos - dy * sin
+        const rotatedY = dx * sin + dy * cos
+        
+        // Now check collision in unrotated space (AABB)
+        const halfWidth = attack.width / 2
+        const halfHeight = attack.height / 2
+        
+        return Math.abs(rotatedX) < halfWidth + ps && 
+               Math.abs(rotatedY) < halfHeight + ps
       }
     } else if (attack.type === 'bigProjectile' || attack.type === 'homing') {
       const dist = Math.sqrt((px - attack.x) ** 2 + (py - attack.y) ** 2)
